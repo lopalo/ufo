@@ -1,0 +1,33 @@
+# all values are shares of window
+game:
+  fullscreen: false 
+  update_speed: 30 # count per second
+  max_dead_men: 10
+  increment_men_on_step: 5
+  step: 30 #seconds
+  debug: true
+  test_force: [0, 11] # "f" key
+
+world:
+  size: [2, 1]
+  ground_height: .1
+  background_color: [.2, .2, .2]
+  ground_color: [0, 0, 0]
+  gravity: 10
+
+ufo:
+  ray_force: 12
+  ray_angle: 40 
+  control: 'arrows' # 'gyroscope' | 'arrows' | 'touch_screen'
+  size: [.3, .1]
+  y: .9
+
+man:
+  speed: .01 # per second
+  dspeed: .006
+  deadly_fly_speed: 600 # when touches ground 
+  fly_rotation_speed: 60 # degrees per second
+  right_image: graphics/right_man.atlas
+  left_image: graphics/right_man.atlas
+  size: .1
+

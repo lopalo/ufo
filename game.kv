@@ -1,0 +1,29 @@
+<Rect>:
+    canvas:
+        Color:
+            rgb: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<UFO>:
+    canvas:
+        Color:
+            rgb: (0, 0, 1) 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Man>
+    canvas.before:
+        PushMatrix
+        Translate:
+            xy: self.center_x, self.center_y
+        Rotate: 
+            angle:self.angle
+            axis: 0, 0, 1
+        Translate:
+            xy: -self.center_x, -self.center_y
+    canvas.after:
+        PopMatrix
+
