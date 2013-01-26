@@ -26,6 +26,7 @@ class World(Rect):
         self.test_force = Vector(0, 0)
         self._ufo_direction = 0
         self._men = []
+        self._objects = []
         self._elapsed_time = 0
         keyboard = Window.request_keyboard(None, self)
         keyboard.bind(on_key_down=self.on_key_down, on_key_up=self.on_key_up)
@@ -41,6 +42,7 @@ class World(Rect):
         self.register_event_type('on_man_lost')
         self.register_event_type('on_man_captured')
         self.start_update()
+        self._add_objects()
 
     def stop_update(self):
         Clock.unschedule(self.update)
@@ -71,7 +73,14 @@ class World(Rect):
             if kname == 'left' and self._ufo_direction < 0:
                 self._ufo_direction = 0
 
-    def add_man(self):
+    def _add_objects(self):
+        #TODO: implement
+        obj = Rect(center=(self.center_x, 0), color=(1, 1, 1))
+        self.add_widget(obj)
+        self._objects.append(obj)
+
+
+    def _add_man(self):
         gr = self.ground
         run_direction = choice([1, -1])
         img = S.man.right_image if run_direction == 1 else S.man.left_image
@@ -98,18 +107,15 @@ class World(Rect):
         need_men = int(step * S.game.increment_men_on_step)
         diff = need_men - len(self._men)
         for _ in range(diff):
-            self.add_man()
+            self._add_man()
         ufo = self.ufo
-        if self._ufo_direction == 1:
-            ufo.to_right()
-        elif self._ufo_direction == -1:
-            ufo.to_left()
+        ufo.update(dt, self._ufo_direction)
         self._update_screen()
         force = Vector(0, -S.world.gravity) + self.test_force
         for man in self._men:
             fdir = ufo.in_ray(man)
             if fdir is not None:
-                iforce = force + fdir * S.ufo.ray_force
+                iforce = force + fdir * S.ufo.ray.force
                 man.update(iforce, dt)
             else:
                 man.update(force, dt)
@@ -129,7 +135,8 @@ class World(Rect):
         self.ufo.x += d
         for man in self._men:
             man.x += d
-
+        for obj in self._objects:
+            obj.x += d
 
 
 

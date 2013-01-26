@@ -1,4 +1,6 @@
-# all values are shares of window
+# Position and size values are defined in shares of window
+# Speeds are defined in shares of objects size per second
+
 game:
   fullscreen: false 
   update_speed: 30 # count per second
@@ -16,16 +18,20 @@ world:
   gravity: 10
 
 ufo:
-  ray_force: 12
-  ray_angle: 40 
+  ray:
+    force: 12
+    angle: 40
+  max_speed: .01 # absolute value
+  acceleration: .01 # per second
+  braking: 0.002
   control: 'arrows' # 'gyroscope' | 'arrows' | 'touch_screen'
   size: [.3, .1]
   y: .9
 
 man:
-  speed: .01 # per second
+  speed: .01 
   dspeed: .006
-  deadly_fly_speed: 600 # when touches ground 
+  deadly_fly_speed: 480 # when touches ground 
   fly_rotation_speed: 60 # degrees per second
   right_image: graphics/right_man.atlas
   left_image: graphics/right_man.atlas
