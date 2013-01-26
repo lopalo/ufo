@@ -21,6 +21,12 @@ ufo:
   ray:
     force: 12
     angle: 40
+  pendulum:
+    amplitude_angle: 15
+    swing_factor: 100 # angle per sec
+    gravity_factor: 800 # angle per sec
+    braking_factor: .01 # angle per sec
+  image: graphics/ufo.png
   max_speed: .01 # absolute value
   acceleration: .01 # per second
   braking: 0.002

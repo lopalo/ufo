@@ -36,6 +36,7 @@ class World(Rect):
                                           S.world.ground_height)))
         self.add_widget(self.ground)
         self.ufo = UFO(center=(self.ground.center_x, Window.height * S.ufo.y),
+                       source=S.ufo.image,
                        size=get_size((S.ufo.size)),
                        ground=self.ground)
         self.add_widget(self.ufo)

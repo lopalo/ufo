@@ -5,7 +5,7 @@ kivy.require('1.5.1')
 from anim_loader import AnimationAtlasLoader #registers loader for Image
 
 
-class Settings(object): #TODO: load from file
+class Settings(object):
 
 
     def __init__(self, dct, is_root):

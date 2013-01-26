@@ -6,15 +6,8 @@
             pos: self.pos
             size: self.size
 
-<UFO>:
-    canvas:
-        Color:
-            rgb: (0, 0, 1) 
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
-<Man>
+<Man,UFO>
     canvas.before:
         PushMatrix
         Translate:
