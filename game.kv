@@ -6,6 +6,18 @@
             pos: self.pos
             size: self.size
 
+<Ground>:
+    canvas:
+        Color:
+            rgb: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgb: self.line_color
+        Line:
+            points: self.x, self.height, self.width, self.height
+            width: self.line_width
 
 <Man,UFO>
     canvas.before:

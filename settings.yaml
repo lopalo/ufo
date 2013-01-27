@@ -11,11 +11,23 @@ game:
   test_force: [0, 11] # "f" key
 
 world:
-  size: [2, 1]
-  ground_height: .1
-  background_color: [.2, .2, .2]
-  ground_color: [0, 0, 0]
   gravity: 10
+  size: [2, 1]
+  background_color: [.1, .1, .11]
+  ground:
+    color: [0, 0, 0]
+    border_color: [1, 1, 1]
+    height: .1
+    border_width: .002
+  objects:
+  # positions should be defined in range [0, <world.width>]
+  - size: [.15, .15] 
+    image: graphics/moon.png 
+    pos: [1.5, .75]
+  - size: [.26, .26]
+    image: graphics/house_1.png
+    pos: [1, .1]
+
 
 ufo:
   ray:

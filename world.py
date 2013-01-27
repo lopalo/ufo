@@ -2,21 +2,31 @@ from random import choice
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 from kivy.vector import Vector
 from man import Man
 from ufo import UFO
 
 
-def get_size(size_factor):
-    return (int(Window.width * size_factor[0]),
-            int(Window.height * size_factor[1]))
+def get_size(factor):
+    return (int(Window.width * factor[0]),
+            int(Window.height * factor[1]))
 
+get_pos = get_size
 
 class Rect(Widget):
 
     def __init__(self, **kwargs):
         self.color = kwargs['color']
         super(Rect, self).__init__(**kwargs)
+
+
+class Ground(Rect):
+
+    def __init__(self, **kwargs):
+        self.line_color = kwargs['line_color']
+        self.line_width = kwargs['line_width']
+        super(Ground, self).__init__(**kwargs)
 
 
 class World(Rect):
@@ -30,10 +40,14 @@ class World(Rect):
         self._elapsed_time = 0
         keyboard = Window.request_keyboard(None, self)
         keyboard.bind(on_key_down=self.on_key_down, on_key_up=self.on_key_up)
-        self.ground = Rect(color=S.world.ground_color,
-                           pos=(0, 0),
-                           size=get_size((S.world.size[0],
-                                          S.world.ground_height)))
+        self._add_objects()
+        self.ground = Ground(color=S.world.ground.color,
+                             pos=(0, 0),
+                             line_color=S.world.ground.border_color,
+                             line_width=(S.world.ground.border_width *
+                                                        Window.height),
+                             size=get_size((S.world.size[0],
+                                            S.world.ground.height)))
         self.add_widget(self.ground)
         self.ufo = UFO(center=(self.ground.center_x, Window.height * S.ufo.y),
                        source=S.ufo.image,
@@ -43,7 +57,6 @@ class World(Rect):
         self.register_event_type('on_man_lost')
         self.register_event_type('on_man_captured')
         self.start_update()
-        self._add_objects()
 
     def stop_update(self):
         Clock.unschedule(self.update)
@@ -75,11 +88,20 @@ class World(Rect):
                 self._ufo_direction = 0
 
     def _add_objects(self):
-        #TODO: implement
-        obj = Rect(center=(self.center_x, 0), color=(1, 1, 1))
-        self.add_widget(obj)
-        self._objects.append(obj)
+        ww = Window.width * S.world.size[0]
+        wh = Window.height * S.world.size[1]
+        for n, obj in enumerate(S.world.objects):
+            img = Image(source=obj['image'],
+                        size=get_size(obj['size']),
+                        pos=get_pos(obj['pos']))
+            print (ww, wh, img.right, img.x)
+            assert 0 <= img.right and ww >= img.x, ("Bad x coordinate "
+                                                    "for {} item".format(n))
+            assert 0 <= img.top and wh >= img.y, ("Bad y coordinate "
+                                                "for {} item".format(n))
 
+            self.add_widget(img)
+            self._objects.append(img)
 
     def _add_man(self):
         gr = self.ground
