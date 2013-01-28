@@ -69,6 +69,24 @@ class World(Rect):
         keyboard.unbind(on_key_down=self.on_key_down,
                         on_key_up=self.on_key_up)
 
+    def on_touch_down(self, touch):
+        if S.ufo.control != 'touch_screen':
+            return False
+        if touch.x > Window.center[0]:
+            self._ufo_direction = 1
+        else:
+            self._ufo_direction = -1
+        return True
+
+    def on_touch_up(self, touch):
+        if S.ufo.control != 'touch_screen':
+            return False
+        if touch.x > Window.center[0] and self._ufo_direction > 0:
+            self._ufo_direction = 0
+        if touch.y <= Window.center[0] and self._ufo_direction < 0:
+            self._ufo_direction = 0
+        return True
+
     def on_key_down(self, keyboard, (code, kname), text, mod):
         if kname == 'f' and S.game.debug:
             self.test_force = Vector(S.game.test_force)
