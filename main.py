@@ -25,7 +25,7 @@ class Settings(object):
         return val
 
 
-if __name__ == '__main__':
+if __name__ in ( '__main__', '__android__'):
     __builtin__.S = Settings.load_yaml('settings.yaml')
     if S.game.fullscreen:
         from kivy.config import Config

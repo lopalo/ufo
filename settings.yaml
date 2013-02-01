@@ -12,7 +12,7 @@ game:
 
 world:
   gravity: 10
-  size: [2, 1]
+  size: [3, 1]
   background_color: [.1, .1, .11]
   ground:
     color: [0, 0, 0]
@@ -24,9 +24,31 @@ world:
   - size: [.15, .15] 
     image: graphics/moon.png 
     pos: [1.5, .75]
-  - size: [.26, .26]
+  - size: [.27, .27]
     image: graphics/house_1.png
     pos: [1, .1]
+  - size: [.2, .1]
+    image: graphics/car_1.png
+    pos: [2.5, .1]
+  - size: [.2, .1]
+    image: graphics/car_1.png
+    pos: [1.2, .1]
+  - size: [.3, .3]
+    image: graphics/tree_1.png
+    pos: [.2, .1]
+  - size: [.3, .3]
+    image: graphics/tree_1.png
+    pos: [.25, .1]
+  - size: [.3, .3]
+    image: graphics/tree_1.png
+    pos: [.5, .1]
+  - size: [.3, .3]
+    image: graphics/tree_1.png
+    pos: [2, .1]
+  - size: [.3, .3]
+    image: graphics/tree_2.png
+    pos: [1.5, .1]
+
 
 
 ufo:
@@ -40,10 +62,10 @@ ufo:
     braking_factor: .01 # angle per sec
   image: graphics/ufo.png
   max_speed: .01 # absolute value
-  acceleration: .01 # per second
+  acceleration: .005 # per second
   braking: 0.002
   control: 'arrows' # 'gyroscope' | 'arrows' | 'touch_screen'
-  size: [.3, .1]
+  size: [.4, .15]
   y: .9
 
 man:

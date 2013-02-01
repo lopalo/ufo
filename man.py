@@ -5,6 +5,7 @@ from kivy.properties import NumericProperty
 
 
 class Man(Image):
+    #TODO: set score that depends on time of fly
     angle = NumericProperty(0)
 
     def __init__(self, **kwargs):

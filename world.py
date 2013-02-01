@@ -38,9 +38,10 @@ class World(Rect):
         self._men = []
         self._objects = []
         self._elapsed_time = 0
-        keyboard = Window.request_keyboard(None, self)
-        keyboard.bind(on_key_down=self.on_key_down, on_key_up=self.on_key_up)
-        self._add_objects()
+        if S.ufo.control == 'arrows':
+            keyboard = Window.request_keyboard(None, self)
+            keyboard.bind(on_key_down=self.on_key_down,
+                          on_key_up=self.on_key_up)
         self.ground = Ground(color=S.world.ground.color,
                              pos=(0, 0),
                              line_color=S.world.ground.border_color,
@@ -51,9 +52,10 @@ class World(Rect):
         self.add_widget(self.ground)
         self.ufo = UFO(center=(self.ground.center_x, Window.height * S.ufo.y),
                        source=S.ufo.image,
-                       size=get_size((S.ufo.size)),
+                       size=get_size(S.ufo.size),
                        ground=self.ground)
         self.add_widget(self.ufo)
+        self._add_objects()
         self.register_event_type('on_man_lost')
         self.register_event_type('on_man_captured')
         self.start_update()
@@ -66,8 +68,6 @@ class World(Rect):
 
     def destroy(self):
         self.stop_update()
-        keyboard.unbind(on_key_down=self.on_key_down,
-                        on_key_up=self.on_key_up)
 
     def on_touch_down(self, touch):
         if S.ufo.control != 'touch_screen':
@@ -90,20 +90,18 @@ class World(Rect):
     def on_key_down(self, keyboard, (code, kname), text, mod):
         if kname == 'f' and S.game.debug:
             self.test_force = Vector(S.game.test_force)
-        if S.ufo.control == 'arrows':
-            if kname == 'right':
-                self._ufo_direction = 1
-            if kname == 'left':
-                self._ufo_direction = -1
+        if kname == 'right':
+            self._ufo_direction = 1
+        if kname == 'left':
+            self._ufo_direction = -1
 
     def on_key_up(self, keyboard, (code, kname)):
         if kname == 'f' and S.game.debug:
             self.test_force = Vector(0, 0)
-        if S.ufo.control == 'arrows':
-            if kname == 'right' and self._ufo_direction > 0:
-                self._ufo_direction = 0
-            if kname == 'left' and self._ufo_direction < 0:
-                self._ufo_direction = 0
+        if kname == 'right' and self._ufo_direction > 0:
+            self._ufo_direction = 0
+        if kname == 'left' and self._ufo_direction < 0:
+            self._ufo_direction = 0
 
     def _add_objects(self):
         ww = Window.width * S.world.size[0]
@@ -112,7 +110,6 @@ class World(Rect):
             img = Image(source=obj['image'],
                         size=get_size(obj['size']),
                         pos=get_pos(obj['pos']))
-            print (ww, wh, img.right, img.x)
             assert 0 <= img.right and ww >= img.x, ("Bad x coordinate "
                                                     "for {} item".format(n))
             assert 0 <= img.top and wh >= img.y, ("Bad y coordinate "
