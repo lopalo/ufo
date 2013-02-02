@@ -50,12 +50,13 @@ class World(Rect):
                              size=get_size((S.world.size[0],
                                             S.world.ground.height)))
         self.add_widget(self.ground)
+        self._add_objects()
         self.ufo = UFO(center=(self.ground.center_x, Window.height * S.ufo.y),
                        source=S.ufo.image,
                        size=get_size(S.ufo.size),
+                       anim_delay=1. / S.ufo.anim_speed,
                        ground=self.ground)
         self.add_widget(self.ufo)
-        self._add_objects()
         self.register_event_type('on_man_lost')
         self.register_event_type('on_man_captured')
         self.start_update()

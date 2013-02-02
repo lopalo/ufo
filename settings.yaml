@@ -7,7 +7,7 @@ game:
   max_dead_men: 10
   increment_men_on_step: 5
   step: 30 #seconds
-  debug: true
+  debug: false 
   test_force: [0, 11] # "f" key
 
 world:
@@ -55,12 +55,16 @@ ufo:
   ray:
     force: 12
     angle: 40
+    size: [.4, .8]
+    image: graphics/ray.atlas
+    anim_speed: 12
   pendulum:
-    amplitude_angle: 15
+    amplitude_angle: 20 
     swing_factor: 100 # angle per sec
     gravity_factor: 800 # angle per sec
     braking_factor: .01 # angle per sec
-  image: graphics/ufo.png
+  image: graphics/ufo.atlas
+  anim_speed: 10
   max_speed: .01 # absolute value
   acceleration: .005 # per second
   braking: 0.002
