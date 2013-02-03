@@ -7,7 +7,7 @@ game:
   max_dead_men: 10
   increment_men_on_step: 5
   step: 30 #seconds
-  debug: false 
+  debug: true 
   test_force: [0, 11] # "f" key
 
 world:
@@ -49,8 +49,6 @@ world:
     image: graphics/tree_2.png
     pos: [1.5, .1]
 
-
-
 ufo:
   ray:
     force: 12
@@ -59,17 +57,17 @@ ufo:
     image: graphics/ray.atlas
     anim_speed: 12
   pendulum:
-    amplitude_angle: 20 
-    swing_factor: 100 # angle per sec
+    amplitude_angle: 30 
+    swing_factor: 400 # angle per sec
     gravity_factor: 800 # angle per sec
     braking_factor: .01 # angle per sec
   image: graphics/ufo.atlas
   anim_speed: 10
   max_speed: .01 # absolute value
-  acceleration: .005 # per second
+  acceleration: .01 # per second
   braking: 0.002
   control: 'arrows' # 'gyroscope' | 'arrows' | 'touch_screen'
-  size: [.4, .15]
+  size: [.3, .15]
   y: .9
 
 man:
@@ -78,6 +76,6 @@ man:
   deadly_fly_speed: 480 # when touches ground 
   fly_rotation_speed: 60 # degrees per second
   right_image: graphics/right_man.atlas
-  left_image: graphics/right_man.atlas
+  left_image: graphics/left_man.atlas
   size: .1
 

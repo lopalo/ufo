@@ -58,7 +58,7 @@ class Pendulum(object):
         s = S.ufo.pendulum
         ra = radians(self.angle)
         f = -move_direction * cos(ra) * s.swing_factor
-        gf = -sin(ra) * s.gravity_factor if not move_direction else 0
+        gf = -sin(ra) * s.gravity_factor
         self._speed += (f + gf) * dt
         if not move_direction:
             sign = copysign(1, self._speed)

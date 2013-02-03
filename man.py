@@ -1,4 +1,4 @@
-from random import choice, random
+from random import choice, random, randint
 from kivy.uix.image import Image
 from kivy.vector import Vector
 from kivy.properties import NumericProperty
@@ -14,6 +14,8 @@ class Man(Image):
         self._run_direction = kwargs['run_direction']
         diff = S.man.dspeed * random()
         self._run_speed = S.man.speed + diff
+        txt_count = len(self._coreimage._image.textures)
+        self._coreimage._anim_index = randint(0, txt_count)
         self._set_run()
 
     def _set_run(self):
