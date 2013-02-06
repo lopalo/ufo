@@ -9,6 +9,8 @@ game:
   step: 30 #seconds
   debug: true 
   test_force: [0, 11] # "f" key
+  score_file: score.yaml
+  score_color: [1, 1, 1, 1]
 
 world:
   gravity: 10

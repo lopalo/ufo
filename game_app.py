@@ -8,7 +8,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from world import World, get_size
-from menu import StartMenu, GameMenu
+from menu import StartMenu, GameMenu, ScoreMenu
 
 
 class Score(Label):
@@ -36,19 +36,27 @@ class MainWidget(Widget):
         super(MainWidget, self).__init__(**kwargs)
         self._world = None
         self._menu = None
-        self.open_menu()
+        self._score_list = None
+        self.open_menu('main')
 
     def exit(self, button):
         EventLoop.close()
 
-    def open_menu(self):
-        assert self._menu is None
-        kwargs = dict(main_widget=self,
-                      size=get_size((0.2, 0.2)))
-        if self._world is None:
-            menu = StartMenu(**kwargs)
+    def open_menu(self, menu_name):
+        if self._menu is not None:
+            self.close_menu()
+        if menu_name == 'main':
+            kwargs = dict(main_widget=self,
+                          spacing=20,
+                          size=get_size((0.2, 0.5)))
+            if self._world is None:
+                menu = StartMenu(**kwargs)
+            else:
+                menu = GameMenu(**kwargs)
+        elif menu_name == 'score':
+            menu = ScoreMenu(main_widget=self, size=get_size((0.2, 0.6)))
         else:
-            menu = GameMenu(**kwargs)
+            raise AssertionError('Unknown menu "{}"'.format(menu_name))
         self._menu = menu
         self.add_widget(menu)
         menu.center=self.center
@@ -57,6 +65,12 @@ class MainWidget(Widget):
         assert self._menu is not None
         self.remove_widget(self._menu)
         self._menu = None
+
+    def open_score(self, button):
+        self.open_menu('score')
+
+    def open_main_menu(self, button):
+        self.open_menu('main')
 
     def start_game(self, button):
         assert self._world is None
@@ -90,7 +104,7 @@ class MainWidget(Widget):
     def stop_game(self, button):
         self._world.stop_update()
         self._menu_button.unbind(on_press=self.stop_game)
-        self.open_menu()
+        self.open_menu('main')
 
     def resume_game(self, button):
         self._world.start_update()
