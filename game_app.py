@@ -8,7 +8,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from world import World, get_size
-from menu import StartMenu, GameMenu, ScoreMenu
+from menu import StartMenu, GameMenu, ScoreMenu, EnterName
 
 
 class Score(Label):
@@ -29,6 +29,14 @@ class Score(Label):
         self._current = val
         self.text = self._pattern.format(current=self._current, max=self._max)
 
+    @property
+    def reached(self):
+        if self._max is None:
+            return False
+        if self._current >= self._max:
+            return True
+        return False
+
 
 class MainWidget(Widget):
 
@@ -42,12 +50,12 @@ class MainWidget(Widget):
     def exit(self, button):
         EventLoop.close()
 
-    def open_menu(self, menu_name):
+    def open_menu(self, menu_name, **kwargs):
         if self._menu is not None:
             self.close_menu()
+        kwargs.update(main_widget=self)
         if menu_name == 'main':
-            kwargs = dict(main_widget=self,
-                          spacing=20,
+            kwargs.update(spacing=20,
                           size=get_size((0.2, 0.5)))
             if self._world is None:
                 menu = StartMenu(**kwargs)
@@ -55,6 +63,8 @@ class MainWidget(Widget):
                 menu = GameMenu(**kwargs)
         elif menu_name == 'score':
             menu = ScoreMenu(main_widget=self, size=get_size((0.2, 0.6)))
+        elif menu_name == 'enter_name':
+            menu = EnterName(spacing=10, size=get_size((0.2, 0.2)), **kwargs)
         else:
             raise AssertionError('Unknown menu "{}"'.format(menu_name))
         self._menu = menu
@@ -124,11 +134,14 @@ class MainWidget(Widget):
         self.start_game(button)
 
     def incr_lost_score(self, world, man):
-        self._lost_score.current = self._lost_score.current + 1
-        #TODO: check of game over
+        lscore = self._lost_score
+        lscore.current = lscore.current + 1
+        if lscore.reached:
+            self.finish_game()
+            self.open_menu('enter_name', score=self._score.current)
 
     def incr_score(self, world, man):
-        self._score.current = self._score.current + 1
+        self._score.current = self._score.current + man.score
 
 class App(BaseApp):
 

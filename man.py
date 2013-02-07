@@ -1,3 +1,4 @@
+import time
 from random import choice, random, randint
 from kivy.uix.image import Image
 from kivy.vector import Vector
@@ -22,9 +23,16 @@ class Man(Image):
         self._in_air = False
         self.y = self._ground.top
         self._fly_rotation_direction = None
+        self._fly_started = None
         self.angle = 0
         self._fly_speed = Vector(0, 0)
         self.anim_delay = 1. / (S.man.speed * 500.)
+
+    def _set_fly(self):
+        self._in_air = True
+        self._fly_started = time.time()
+        self._fly_rotation_direction = choice([1, -1])
+        self.anim_delay = -1
 
     def update(self, force, dt):
         self._update_state(force)
@@ -44,10 +52,7 @@ class Man(Image):
 
     def _update_state(self, force):
         if not self._in_air and force.y > 0:
-            self._in_air = True
-            self._fly_rotation_direction = choice([1, -1])
-            self.anim_delay = -1
-
+           self._set_fly()
         if self._in_air and self.y < self._ground.top:
             speed = self._fly_speed.length() * self.height
             if speed >= S.man.deadly_fly_speed:
@@ -59,6 +64,7 @@ class Man(Image):
     def _update_fly(self, force, dt):
         # mass = 1 and therefore force = acceleration
         self.y = float(self.y)
+
         self._fly_speed += force * dt
         diff = self._fly_speed * dt * self.height
         self.x += diff.x
@@ -69,3 +75,6 @@ class Man(Image):
     def _update_run(self):
         self.x += self.width * self._run_speed * self._run_direction
 
+    @property
+    def score(self):
+        return int((time.time() - self._fly_started) * S.game.score.factor)

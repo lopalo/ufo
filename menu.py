@@ -3,6 +3,7 @@ import yaml
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
 
 
 class MainMenu(BoxLayout):
@@ -46,21 +47,24 @@ class GameMenu(MainMenu):
         super(GameMenu, self).add_buttons(mw)
 
 
+def get_score():
+    if path.exists(S.game.score.file):
+        with open(S.game.score.file, 'r') as f:
+            return yaml.load(f)['score']
+    return []
+
+
 class ScoreMenu(BoxLayout):
 
     def __init__(self, **kwargs):
         super(ScoreMenu, self).__init__(**kwargs)
         self.orientation = 'vertical'
-        if path.exists(S.game.score_file):
-            with open(S.game.score_file, 'rb') as f:
-                score = yaml.load(f)['score']
-        else:
-            score = []
-        score.sort(key=lambda i: i[0])
-        color = S.game.score_color
+        score = get_score()
+        score.sort(key=lambda i: i[1], reverse=True)
+        color = S.game.score.color
         self.add_widget(Label(text='Score', font_size='30sp', color=color))
         for name, sc in score[:10]:
-            self.add_widget(Label(text='{}: {}'.format(name, sc),
+            self.add_widget(Label(text=u'{}: {}'.format(name, sc),
                                   color=color,
                                   font_size='20sp'))
         button = Button(text='Menu')
@@ -68,4 +72,28 @@ class ScoreMenu(BoxLayout):
         self.add_widget(button)
 
 
+class EnterName(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super(EnterName, self).__init__(**kwargs)
+        self._score = kwargs['score']
+        self._main_widget = kwargs['main_widget']
+
+        self.orientation = 'vertical'
+        self.add_widget(Label(text='Enter name', font_size='20sp'))
+        self._text_input = TextInput(multiline=False)
+        self.add_widget(self._text_input)
+        button = Button(text='Ok')
+        button.bind(on_press=self.ok)
+        self.add_widget(button)
+
+    def ok(self, button):
+        score = get_score()
+        with open(S.game.score.file, 'wb') as f:
+            name = self._text_input.text
+            score.append([name, self._score])
+            score.sort(key=lambda i: i[1], reverse=True)
+            score = score[:10]
+            yaml.dump({'score': score}, f, allow_unicode=True)
+        self._main_widget.open_main_menu(button)
 
