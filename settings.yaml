@@ -58,14 +58,14 @@ ufo:
     force: 12
     angle: 40
     size: [.4, .8]
-    image: graphics/ray.atlas
+    image: graphics/ray.anim_atlas
     anim_speed: 12
   pendulum:
     amplitude_angle: 30 
     swing_factor: 400 # angle per sec
     gravity_factor: 800 # angle per sec
     braking_factor: .01 # angle per sec
-  image: graphics/ufo.atlas
+  image: graphics/ufo.anim_atlas
   anim_speed: 10
   max_speed: .01 # absolute value
   acceleration: .01 # per second
@@ -79,7 +79,7 @@ man:
   dspeed: .006
   deadly_fly_speed: 480 # when touches ground 
   fly_rotation_speed: 60 # degrees per second
-  right_image: graphics/right_man.atlas
-  left_image: graphics/left_man.atlas
+  right_image: graphics/right_man.anim_atlas
+  left_image: graphics/left_man.anim_atlas
   size: .1
 
