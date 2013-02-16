@@ -6,13 +6,20 @@ from kivy.uix.image import Image
 from kivy.vector import Vector
 from man import Man
 from ufo import UFO
+from anim_loader import on_anim_finish
 
 
 def get_size(factor):
+    return (int(Window.height * factor[0]),
+            int(Window.height * factor[1]))
+
+
+def get_pos(factor):
     return (int(Window.width * factor[0]),
             int(Window.height * factor[1]))
 
-get_pos = get_size
+get_world_size = get_pos
+
 
 class Rect(Widget):
 
@@ -47,8 +54,8 @@ class World(Rect):
                              line_color=S.world.ground.border_color,
                              line_width=(S.world.ground.border_width *
                                                         Window.height),
-                             size=get_size((S.world.size[0],
-                                            S.world.ground.height)))
+                             size=get_world_size((S.world.size[0],
+                                                  S.world.ground.height)))
         self.add_widget(self.ground)
         self._add_objects()
         self.ufo = UFO(center=(self.ground.center_x, Window.height * S.ufo.y),
@@ -60,6 +67,8 @@ class World(Rect):
         self.register_event_type('on_man_lost')
         self.register_event_type('on_man_captured')
         self.start_update()
+
+        self._get_smoke() # need for caching
 
     def stop_update(self):
         Clock.unschedule(self.update)
@@ -127,7 +136,7 @@ class World(Rect):
         man = Man(center=(x, gr.top),
                   source=img,
                   run_direction=run_direction,
-                  size=get_size((S.man.size, S.man.size)),
+                  size=get_size(S.man.size),
                   ground=gr)
         self.add_widget(man)
         self._men.append(man)
@@ -135,10 +144,29 @@ class World(Rect):
     def on_man_lost(self, man):
         self.remove_widget(man)
         self._men.remove(man)
+        self.man_disappear(man)
 
     def on_man_captured(self, man):
         self.remove_widget(man)
         self._men.remove(man)
+        self.man_disappear(man)
+
+    def man_disappear(self, man):
+        img = self._get_smoke()
+        img.center_x = man.center_x
+        img.y = man.y
+        self.add_widget(img)
+        self._objects.append(img)
+        @on_anim_finish(img)
+        def on_fin(img):
+            self.remove_widget(img)
+            self._objects.remove(img)
+
+    def _get_smoke(self):
+        s = S.man.disappear_animation
+        return Image(source=s.image,
+                     anim_delay = 1. / s.speed,
+                     size=get_size(s.image_size))
 
     def update(self, dt):
         self._elapsed_time += dt

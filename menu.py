@@ -90,10 +90,10 @@ class EnterName(BoxLayout):
     def ok(self, button):
         score = get_score()
         with open(S.game.score.file, 'wb') as f:
-            name = self._text_input.text
+            name = self._text_input.text or u'Unnamed'
             score.append([name, self._score])
             score.sort(key=lambda i: i[1], reverse=True)
             score = score[:10]
-            yaml.dump({'score': score}, f, allow_unicode=True)
+            yaml.safe_dump({'score': score}, f, allow_unicode=True)
         self._main_widget.open_main_menu(button)
 

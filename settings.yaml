@@ -1,10 +1,11 @@
-# Position and size values are defined in shares of window
+# Sizes are defined in shares of height of window
+# Poses are dfined in shares of height and width of window
 # Speeds are defined in shares of objects size per second
 
 game:
   fullscreen: false 
   update_speed: 30 # count per second
-  max_dead_men: 10
+  max_dead_men: 20 
   increment_men_on_step: 5
   step: 30 #seconds
   debug: true 
@@ -28,13 +29,13 @@ world:
   - size: [.15, .15] 
     image: graphics/moon.png 
     pos: [1.5, .75]
-  - size: [.27, .27]
+  - size: [.32, .27]
     image: graphics/house_1.png
     pos: [1, .1]
-  - size: [.2, .1]
+  - size: [.25, .1]
     image: graphics/car_1.png
     pos: [2.5, .1]
-  - size: [.2, .1]
+  - size: [.25, .1]
     image: graphics/car_1.png
     pos: [1.2, .1]
   - size: [.3, .3]
@@ -57,7 +58,7 @@ ufo:
   ray:
     force: 12
     angle: 40
-    size: [.4, .8]
+    size: [.64, .8]
     image: graphics/ray.anim_atlas
     anim_speed: 12
   pendulum:
@@ -77,9 +78,13 @@ ufo:
 man:
   speed: .01 
   dspeed: .006
-  deadly_fly_speed: 480 # when touches ground 
+  deadly_fly_speed: 500  # when touches ground
   fly_rotation_speed: 60 # degrees per second
   right_image: graphics/right_man.anim_atlas
   left_image: graphics/left_man.anim_atlas
-  size: .1
+  size: [.07, 0.1]
+  disappear_animation:
+    image: graphics/smoke.anim_atlas
+    speed: 15
+    image_size: [0.2, 0.2]
 

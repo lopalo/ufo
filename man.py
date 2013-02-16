@@ -6,7 +6,6 @@ from kivy.properties import NumericProperty
 
 
 class Man(Image):
-    #TODO: set score that depends on time of fly
     angle = NumericProperty(0)
 
     def __init__(self, **kwargs):
@@ -16,7 +15,7 @@ class Man(Image):
         diff = S.man.dspeed * random()
         self._run_speed = S.man.speed + diff
         txt_count = len(self._coreimage._image.textures)
-        self._coreimage._anim_index = randint(0, txt_count)
+        self._coreimage._anim_index = randint(0, txt_count - 1)
         self._set_run()
 
     def _set_run(self):

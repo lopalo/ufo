@@ -67,3 +67,16 @@ class AnimAtlas(Atlas):
             textures.append(ci.texture.get_region(*reg_info[n]))
 
         self.textures = textures
+
+
+def on_anim_finish(img):
+    def wrapper(fun):
+        def checker(core_img):
+            if core_img._anim_index != 0:
+                return
+            core_img.unbind(on_texture=checker)
+            fun(img)
+        img._coreimage.bind(on_texture=checker)
+        return fun
+    return wrapper
+

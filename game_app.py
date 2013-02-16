@@ -7,7 +7,7 @@ from kivy.uix.label import Label
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from world import World, get_size
+from world import World, get_size, get_world_size
 from menu import StartMenu, GameMenu, ScoreMenu, EnterName
 
 
@@ -86,7 +86,7 @@ class MainWidget(Widget):
         assert self._world is None
         self._world = World(color=S.world.background_color,
                             pos=(0, 0),
-                            size=get_size(S.world.size))
+                            size=get_world_size(S.world.size))
         self.add_widget(self._world)
         self._world.bind(on_man_lost=self.incr_lost_score)
         self._world.bind(on_man_captured=self.incr_score)
@@ -136,7 +136,7 @@ class MainWidget(Widget):
     def incr_lost_score(self, world, man):
         lscore = self._lost_score
         lscore.current = lscore.current + 1
-        if lscore.reached:
+        if lscore.reached and self._world is not None:
             self.finish_game()
             self.open_menu('enter_name', score=self._score.current)
 
